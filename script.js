@@ -1,10 +1,10 @@
-// script.js
-
 // Seleciona os elementos do DOM
 const aumentarButton = document.getElementById('aumentar');
 const resetButton = document.getElementById('reset');
 const numeroDisplay = document.getElementById('numero');
 const mensagemDisplay = document.getElementById('mensagem');
+const lastClickDate = localStorage.getItem('lastClickDate');
+const today = new Date().toDateString();
 
 // Função para carregar o número salvo no localStorage
 function carregarNumero() {
@@ -38,6 +38,11 @@ function parabenizarUsuario() {
     }, 3000); // Remove a mensagem após 3 segundos
 }
 
+// Função para verificar se o botão já foi pressionado hoje
+function jaPressionouHoje() {
+    return lastClickDate === today;
+}
+
 // Função para verificar se o botão pode ser pressionado
 function podePressionarBotao() {
     let agora = new Date();
@@ -46,7 +51,15 @@ function podePressionarBotao() {
     
     // Verifica se a hora está entre 4:30 e 5:50
     if ((horas === 4 && minutos >= 30) || (horas === 5 && minutos <= 50)) {
-        return true;
+        if (!jaPressionouHoje()) {
+            return true;
+        } else {
+            mensagemDisplay.textContent = 'Você já pressionou o botão hoje!';
+            setTimeout(() => {
+                mensagemDisplay.textContent = '';
+            }, 3000); // Remove a mensagem após 3 segundos
+            return false;
+        }
     } else {
         mensagemDisplay.textContent = 'Você só pode pressionar o botão entre 4:30 e 5:50!';
         setTimeout(() => {
@@ -64,6 +77,8 @@ function aumentarNumero() {
         numeroDisplay.textContent = numeroAtual;
         salvarNumero(numeroAtual);
         parabenizarUsuario();
+        aumentarButton.disabled = true;
+        localStorage.setItem('lastClickDate', today);
     }
 }
 
@@ -71,6 +86,8 @@ function aumentarNumero() {
 function resetNumero() {
     numeroDisplay.textContent = 0;
     salvarNumero(0);
+    localStorage.removeItem('lastClickDate');
+    aumentarButton.disabled = false;
     mensagemDisplay.textContent = ''; // Limpa a mensagem ao resetar
 }
 

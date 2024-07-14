@@ -23,6 +23,12 @@ button {
     outline: none;
     padding: 10px;
     margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3a373f;
 }
 
 button#aumentar {
@@ -31,12 +37,14 @@ button#aumentar {
 
 h2#numero {
     margin: 0 10px;
+    font-size: 2rem;
 }
 
 section {
     background: #48464c;
     border-radius: 10px;
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
     margin: 20px auto;
     box-shadow: 5px 5px 10px #00000072;
     text-align: center;
